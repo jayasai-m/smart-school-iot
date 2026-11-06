@@ -19,7 +19,7 @@ from .api.inspector_routes import router as inspector_router
 # Create all database tables (including inspector_schools)
 Base.metadata.create_all(bind=engine)
 
-UPLOAD_DIR = os.getenv("UPLOAD_DIR", "uploads")
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", "/tmp/uploads" if os.getenv("VERCEL") else "uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 app = FastAPI(

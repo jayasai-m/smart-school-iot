@@ -5,7 +5,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///smart_school.db")
+is_vercel = bool(os.getenv("VERCEL"))
+if is_vercel:
+    import tempfile
+    tmp_dir = "/tmp" if os.name != "nt" else tempfile.gettempdir()
+    db_file = os.path.join(tmp_dir, "smart_school.db").replace("\\", "/")
+    default_db = f"sqlite:///{db_file}"
+else:
+    default_db = "sqlite:///smart_school.db"
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL or (is_vercel and "localhost" in DATABASE_URL):
+    DATABASE_URL = default_db
 
 # Support Render Postgres URL format
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
@@ -44,8 +55,8 @@ try:
     with engine.connect() as test_conn:
         pass
 except Exception as e:
-    print(f"Notice: Primary DB connection failed ({e}). Falling back to local SQLite database.")
-    DATABASE_URL = "sqlite:///smart_school.db"
+    print(f"Notice: Primary DB connection failed ({e}). Falling back to SQLite database ({default_db}).")
+    DATABASE_URL = default_db
     connect_args = {"check_same_thread": False}
     engine = create_engine(
         DATABASE_URL,
