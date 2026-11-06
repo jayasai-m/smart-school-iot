@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd smart-school-iot/frontend && npm install && npm run build",
+  "outputDirectory": "smart-school-iot/frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
