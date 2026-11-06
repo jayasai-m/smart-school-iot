@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: smart-school-iot-backend
+    runtime: python
+    rootDir: smart-school-iot/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL
+        value: sqlite:///smart_school.db
+      - key: FRONTEND_URL
+        value: https://temporary-speedy-celesta-5f9qg2t-nr8npt9cy-anon-mu-indol.vercel.app
+      - key: SECRET_KEY
+        generateValue: true
+      - key: UPLOAD_DIR
+        value: uploads

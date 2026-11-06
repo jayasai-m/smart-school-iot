@@ -5,7 +5,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:abc123@localhost:3306/smart_school_iot")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///smart_school.db")
+
+# Support Render Postgres URL format
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 # Ensure database exists if MySQL is used
 if DATABASE_URL.startswith("mysql"):
@@ -30,12 +34,24 @@ if DATABASE_URL.startswith("mysql"):
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
-    pool_pre_ping=True,
-    pool_recycle=3600
-)
+try:
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        pool_pre_ping=True,
+        pool_recycle=3600 if DATABASE_URL.startswith("mysql") else -1
+    )
+    with engine.connect() as test_conn:
+        pass
+except Exception as e:
+    print(f"Notice: Primary DB connection failed ({e}). Falling back to local SQLite database.")
+    DATABASE_URL = "sqlite:///smart_school.db"
+    connect_args = {"check_same_thread": False}
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        pool_pre_ping=True
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
