@@ -4,7 +4,11 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "destination": "https://smart-school-iot-backend.onrender.com/api/$1"
+    },
+    {
+      "source": "/uploads/(.*)",
+      "destination": "https://smart-school-iot-backend.onrender.com/uploads/$1"
     },
     {
       "source": "/(.*)",

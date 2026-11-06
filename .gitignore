@@ -28,3 +28,5 @@ uploads/*
 .idea/
 *.swp
 .DS_Store
+
+.vercel
