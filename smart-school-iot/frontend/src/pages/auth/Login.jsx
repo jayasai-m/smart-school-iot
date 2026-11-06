@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useLang } from '../../context/LanguageContext';
+import { LanguageToggle } from '../../components/LanguageToggle';
 import { ShieldCheck, Lock, Mail, AlertCircle, ArrowRight } from 'lucide-react';
 
 export const Login = () => {
@@ -10,6 +12,7 @@ export const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { login } = useAuth();
+  const { t } = useLang();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -44,6 +47,11 @@ export const Login = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Language Selector Top Right */}
+      <div className="absolute top-4 right-4 z-20">
+        <LanguageToggle />
+      </div>
+
       {/* Background Subtle Ambient Glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -54,10 +62,10 @@ export const Login = () => {
           </div>
         </div>
         <h2 className="mt-4 text-center text-2xl font-extrabold tracking-tight text-white">
-          SmartSchoolIoT Portal
+          {t('portalTitle')}
         </h2>
         <p className="mt-1 text-center text-xs text-teal-400 font-medium uppercase tracking-wider">
-          Government School Water & Mid-Day Meal Monitoring System
+          {t('portalSubtitle')}
         </p>
       </div>
 
@@ -73,7 +81,7 @@ export const Login = () => {
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Authorized Email Address
+                {t('emailLabel')}
               </label>
               <div className="relative rounded-lg shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -92,7 +100,7 @@ export const Login = () => {
 
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Password
+                {t('passwordLabel')}
               </label>
               <div className="relative rounded-lg shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -119,7 +127,7 @@ export const Login = () => {
                   <div className="w-5 h-5 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></div>
                 ) : (
                   <>
-                    <span>Sign In to Dashboard</span>
+                    <span>{t('signIn')}</span>
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </>
                 )}
@@ -129,9 +137,9 @@ export const Login = () => {
 
           <div className="mt-6 border-t border-slate-800 pt-5 text-center">
             <p className="text-xs text-slate-400">
-              Need to register your government school?{' '}
+              {t('needToRegister')}{' '}
               <Link to="/register" className="font-semibold text-teal-400 hover:text-teal-300 hover:underline">
-                Submit Registration
+                {t('submitRegistration')}
               </Link>
             </p>
           </div>

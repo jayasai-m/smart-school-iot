@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { inspectorService } from '../../services/api';
+import { inspectorService, getImageUrl, FALLBACK_IMAGE } from '../../services/api';
 import {
   Building2,
   Droplets,
@@ -288,8 +288,9 @@ export const InspectorDashboard = () => {
                 <div className="space-y-2">
                   <div className="relative rounded-xl overflow-hidden aspect-video bg-slate-950">
                     <img
-                      src={img.image_url}
+                      src={getImageUrl(img.image_url)}
                       alt={img.meal_type || 'Meal'}
+                      onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = FALLBACK_IMAGE; }}
                       className="w-full h-full object-cover"
                     />
                     <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[9px] font-bold bg-black/70 backdrop-blur-md text-white uppercase">

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { adminService } from '../../services/api';
+import { adminService, getImageUrl, FALLBACK_IMAGE } from '../../services/api';
 import {
   UserCheck,
   Building2,
@@ -516,8 +516,9 @@ export const AdminInspectors = () => {
                               {s.today_images.map((img) => (
                                 <div key={img.id} className="group relative rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
                                   <img
-                                    src={img.image_url}
+                                    src={getImageUrl(img.image_url)}
                                     alt={img.meal_type || 'Meal'}
+                                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = FALLBACK_IMAGE; }}
                                     className="w-full h-24 object-cover group-hover:scale-105 transition-transform duration-200"
                                   />
                                   <div className="p-1.5 bg-slate-900/90 text-[10px]">

@@ -12,8 +12,10 @@ const API = axios.create({
   }
 });
 
+export const FALLBACK_IMAGE = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260" fill="%230f172a"><rect width="400" height="260" fill="%230f172a"/><g fill="%231e293b" stroke="%23334155" stroke-width="2"><rect x="140" y="70" width="120" height="90" rx="12"/><circle cx="200" cy="115" r="22"/></g><circle cx="240" cy="85" r="5" fill="%232dd4bf"/><text x="50%" y="195" dominant-baseline="middle" text-anchor="middle" fill="%2394a3b8" font-family="sans-serif" font-size="12" font-weight="600">Inspection Image Record</text></svg>';
+
 export const getImageUrl = (path) => {
-  if (!path) return '';
+  if (!path) return FALLBACK_IMAGE;
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   const backendBase = rawApiUrl ? rawApiUrl.replace(/\/+$/, '') : '';
   const cleanPath = path.startsWith('/') ? path : `/${path}`;

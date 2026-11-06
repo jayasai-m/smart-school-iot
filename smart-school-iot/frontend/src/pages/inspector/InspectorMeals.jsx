@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { inspectorService } from '../../services/api';
+import { inspectorService, getImageUrl, FALLBACK_IMAGE } from '../../services/api';
 import {
   UtensilsCrossed,
   Check,
@@ -173,8 +173,9 @@ export const InspectorMeals = () => {
               <div>
                 <div className="relative aspect-video bg-slate-950 overflow-hidden">
                   <img
-                    src={img.image_url}
+                    src={getImageUrl(img.image_url)}
                     alt={img.meal_type || 'Meal'}
+                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = FALLBACK_IMAGE; }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                   />
                   <div className="absolute top-2 left-2 flex flex-col gap-1">
@@ -250,8 +251,9 @@ export const InspectorMeals = () => {
 
             <div className="rounded-xl overflow-hidden bg-slate-950 aspect-video max-h-80">
               <img
-                src={selectedImage.image_url}
+                src={getImageUrl(selectedImage.image_url)}
                 alt="Meal Full"
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = FALLBACK_IMAGE; }}
                 className="w-full h-full object-contain"
               />
             </div>

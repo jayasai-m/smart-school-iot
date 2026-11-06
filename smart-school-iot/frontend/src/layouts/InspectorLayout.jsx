@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLang } from '../context/LanguageContext';
+import { LanguageToggle } from '../components/LanguageToggle';
 import {
   LayoutDashboard,
   Box,
@@ -18,6 +20,7 @@ import {
 
 export const InspectorLayout = () => {
   const { user, logout } = useAuth();
+  const { t } = useLang();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -27,13 +30,13 @@ export const InspectorLayout = () => {
   };
 
   const navItems = [
-    { name: 'Dashboard', path: '/inspector/dashboard', icon: LayoutDashboard },
-    { name: 'Assigned Schools', path: '/inspector/schools', icon: Building2 },
-    { name: 'Digital Twin', path: '/inspector/digital-twin', icon: Box },
-    { name: 'Water Quality & Tank', path: '/inspector/water', icon: Droplets },
-    { name: 'Meal & Kitchen Audit', path: '/inspector/meals', icon: UtensilsCrossed },
-    { name: 'Incidents & Alerts', path: '/inspector/alerts', icon: AlertTriangle },
-    { name: 'Profile', path: '/inspector/profile', icon: User },
+    { nameKey: 'dashboard', path: '/inspector/dashboard', icon: LayoutDashboard },
+    { nameKey: 'mySchools', path: '/inspector/schools', icon: Building2 },
+    { nameKey: 'digitalTwin', path: '/inspector/digital-twin', icon: Box },
+    { nameKey: 'waterQuality', path: '/inspector/water', icon: Droplets },
+    { nameKey: 'mealKitchen', path: '/inspector/meals', icon: UtensilsCrossed },
+    { nameKey: 'alerts', path: '/inspector/alerts', icon: AlertTriangle },
+    { nameKey: 'profile', path: '/inspector/profile', icon: User },
   ];
 
   return (
@@ -87,7 +90,7 @@ export const InspectorLayout = () => {
                 }
               >
                 <Icon className="w-4 h-4 mr-3 shrink-0" />
-                <span>{item.name}</span>
+                <span>{t(item.nameKey)}</span>
               </NavLink>
             );
           })}
@@ -102,7 +105,7 @@ export const InspectorLayout = () => {
               </div>
               <div className="truncate">
                 <p className="text-xs font-semibold text-slate-200 truncate">{user?.full_name || user?.email}</p>
-                <p className="text-[10px] text-teal-400 truncate">{user?.district || 'Field Inspector'}</p>
+                <p className="text-[10px] text-teal-400 truncate">{user?.district || t('inspectorRole')}</p>
               </div>
             </div>
           </div>
@@ -111,7 +114,7 @@ export const InspectorLayout = () => {
             className="w-full flex items-center justify-center px-3 py-2 text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg transition-colors border border-rose-500/20 cursor-pointer"
           >
             <LogOut className="w-3.5 h-3.5 mr-2" />
-            Logout
+            {t('logout')}
           </button>
         </div>
       </aside>
@@ -129,18 +132,19 @@ export const InspectorLayout = () => {
             </button>
             <div className="hidden sm:block">
               <span className="text-xs font-medium text-teal-400 uppercase tracking-wider bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
-                Mandal / District Jurisdiction
+                {t('deptLabel')}
               </span>
               <span className="ml-2 text-xs text-slate-400 font-normal">
-                Mid-Day Meal & Water Quality Compliance Verification
+                {t('systemSubtitle')}
               </span>
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
+            <LanguageToggle />
             <div className="text-right hidden sm:block">
               <p className="text-xs font-bold text-slate-200">{user?.full_name}</p>
-              <p className="text-[10px] text-teal-400 font-medium">Field Inspector</p>
+              <p className="text-[10px] text-teal-400 font-medium">{t('inspectorRole')}</p>
             </div>
           </div>
         </header>

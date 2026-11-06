@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { schoolService } from '../../services/api';
+import { useLang } from '../../context/LanguageContext';
 import {
   Building2,
   Droplets,
@@ -20,6 +21,7 @@ export const SchoolDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const { t } = useLang();
 
   const fetchDashboard = async () => {
     try {
@@ -73,7 +75,7 @@ export const SchoolDashboard = () => {
             className="flex items-center space-x-1.5 px-3 py-2 bg-gradient-to-r from-teal-500 to-emerald-500 text-slate-950 rounded-xl text-xs font-bold shadow-md shadow-teal-500/20"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>Upload Photo</span>
+            <span>{t('uploadPhoto')}</span>
           </button>
 
           <button
@@ -91,7 +93,7 @@ export const SchoolDashboard = () => {
         {/* Hardware Status */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
           <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>ESP32 Hardware Link</span>
+            <span>{t('hardwareStatus')}</span>
             {isConnected ? (
               <Wifi className="w-4 h-4 text-emerald-400" />
             ) : (
@@ -104,18 +106,18 @@ export const SchoolDashboard = () => {
                 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                 : 'bg-slate-800 text-slate-400 border border-slate-700'
             }`}>
-              {hardware?.label || 'Hardware Not Connected'}
+              {hardware?.label || (isConnected ? t('connected') : t('disconnected'))}
             </span>
           </div>
           <p className="text-[11px] text-slate-500 mt-2">
-            {isConnected ? 'Telemetry active' : 'Waiting for Sensor Data'}
+            {isConnected ? 'Telemetry active' : t('sensorOffline')}
           </p>
         </div>
 
         {/* Water Tank Level */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
           <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Water Tank Volume</span>
+            <span>{t('waterLevel')}</span>
             <Gauge className="w-4 h-4 text-teal-400" />
           </div>
           <div className="mt-3 flex items-baseline space-x-2">
@@ -123,7 +125,7 @@ export const SchoolDashboard = () => {
               {hasSensorData ? `${latest_reading.water_level_pct}%` : '--'}
             </span>
             <span className="text-xs text-slate-400">
-              {hasSensorData ? `(${latest_reading.water_volume_litres} L)` : '(No Data Available)'}
+              {hasSensorData ? `(${latest_reading.water_volume_litres} L)` : `(${t('noData')})`}
             </span>
           </div>
           <p className="text-[11px] text-slate-500 mt-1">
@@ -134,7 +136,7 @@ export const SchoolDashboard = () => {
         {/* Drinking Water Turbidity */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
           <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Water Clarity / Turbidity</span>
+            <span>{t('turbidity')}</span>
             <Droplets className="w-4 h-4 text-cyan-400" />
           </div>
           <div className="mt-3 flex items-baseline space-x-2">
@@ -148,7 +150,7 @@ export const SchoolDashboard = () => {
                 Quality: {latest_reading.turbidity_status}
               </span>
             ) : (
-              <span className="text-slate-500">Sensor Disconnected</span>
+              <span className="text-slate-500">{t('sensorOffline')}</span>
             )}
           </p>
         </div>
@@ -156,7 +158,7 @@ export const SchoolDashboard = () => {
         {/* Kitchen Humidity */}
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
           <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>Kitchen Humidity</span>
+            <span>{t('humidity')}</span>
             <UtensilsCrossed className="w-4 h-4 text-amber-400" />
           </div>
           <div className="mt-3 flex items-baseline space-x-2">
@@ -165,7 +167,7 @@ export const SchoolDashboard = () => {
             </span>
           </div>
           <p className="text-[11px] text-slate-500 mt-1">
-            {hasSensorData ? `Status: ${latest_reading.humidity_status}` : 'Waiting for Sensor Data'}
+            {hasSensorData ? `Status: ${latest_reading.humidity_status}` : t('noData')}
           </p>
         </div>
       </div>
@@ -177,7 +179,7 @@ export const SchoolDashboard = () => {
           <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <h3 className="font-bold text-sm text-white flex items-center space-x-2">
               <UtensilsCrossed className="w-4 h-4 text-teal-400" />
-              <span>Today's Mid-Day Meal Log</span>
+              <span>{t('todayMeal')}</span>
             </h3>
             <span className="text-[10px] text-slate-500 font-mono">{new Date().toLocaleDateString()}</span>
           </div>

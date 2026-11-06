@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { adminService } from '../../services/api';
+import { adminService, getImageUrl, FALLBACK_IMAGE } from '../../services/api';
 import {
   UtensilsCrossed,
   Check,
@@ -168,8 +168,9 @@ export const AdminMeals = () => {
                   {/* Thumbnail */}
                   <div className="relative h-48 bg-slate-950 overflow-hidden group">
                     <img
-                      src={img.image_url}
+                      src={getImageUrl(img.image_url)}
                       alt="Submission"
+                      onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = FALLBACK_IMAGE; }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -192,10 +193,10 @@ export const AdminMeals = () => {
                     </span>
 
                     {/* Student count badge */}
-                    {img.category === 'STUDENT_EATING' && img.cv_student_count != null && (
+                    {img.category === 'STUDENT_EATING' && (
                       <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-violet-600/90 text-white border border-violet-400/40 flex items-center space-x-1 shadow-md">
                         <Users className="w-3.5 h-3.5" />
-                        <span>~{img.cv_student_count} students</span>
+                        <span>~{img.cv_student_count ?? 0} students</span>
                       </span>
                     )}
                   </div>
@@ -281,8 +282,9 @@ export const AdminMeals = () => {
               {/* Full image */}
               <div className="max-h-80 overflow-hidden rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center">
                 <img
-                  src={selectedImage.image_url}
+                  src={getImageUrl(selectedImage.image_url)}
                   alt="Full Resolution"
+                  onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = FALLBACK_IMAGE; }}
                   className="max-h-80 w-auto object-contain"
                 />
               </div>

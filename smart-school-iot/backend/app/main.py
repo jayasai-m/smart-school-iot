@@ -59,12 +59,34 @@ def seed_initial_data():
     # 5. ZERO fake meal data.
     # 6. ZERO fake images.
 
-    # Ensure users.district column exists before any queries
+    # Ensure users.district and image_submissions CV columns exist before any queries
     from sqlalchemy import text
     try:
         with engine.connect() as conn:
             conn.execute(text("ALTER TABLE users ADD COLUMN district VARCHAR(100) NULL"))
             conn.commit()
+    except Exception:
+        pass
+
+    cols_to_add = [
+        ("latitude", "FLOAT NULL"),
+        ("longitude", "FLOAT NULL"),
+        ("captured_location", "VARCHAR(255) NULL"),
+        ("captured_timestamp", "VARCHAR(100) NULL"),
+        ("cv_status", "VARCHAR(50) NULL"),
+        ("cv_notes", "TEXT NULL"),
+        ("cv_confidence", "FLOAT NULL"),
+        ("cv_processed_at", "DATETIME NULL"),
+        ("cv_student_count", "INTEGER NULL")
+    ]
+    try:
+        with engine.connect() as conn:
+            for col, ctype in cols_to_add:
+                try:
+                    conn.execute(text(f"ALTER TABLE image_submissions ADD COLUMN {col} {ctype}"))
+                    conn.commit()
+                except Exception:
+                    pass
     except Exception:
         pass
 

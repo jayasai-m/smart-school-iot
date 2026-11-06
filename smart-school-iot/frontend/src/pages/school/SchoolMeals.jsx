@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { schoolService } from '../../services/api';
+import { schoolService, getImageUrl, FALLBACK_IMAGE } from '../../services/api';
 import { StaffUploadModal } from '../../components/StaffUploadModal';
 import {
   UtensilsCrossed,
@@ -274,7 +274,12 @@ export const SchoolMeals = () => {
                 <div key={img.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between hover:border-slate-700 transition-colors">
                   <div>
                     <div className="relative h-44 bg-slate-950">
-                      <img src={img.image_url} alt="Meal Inspection" className="w-full h-full object-cover" />
+                      <img
+                        src={getImageUrl(img.image_url)}
+                        alt="Meal Inspection"
+                        onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = FALLBACK_IMAGE; }}
+                        className="w-full h-full object-cover"
+                      />
                       
                       {/* Category Badge */}
                       <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-900/90 text-teal-300 border border-teal-500/30">

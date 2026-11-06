@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLang } from '../context/LanguageContext';
+import { LanguageToggle } from '../components/LanguageToggle';
 import { StaffUploadModal } from '../components/StaffUploadModal';
 import {
   LayoutDashboard,
@@ -19,6 +21,7 @@ import {
 
 export const SchoolLayout = () => {
   const { user, logout } = useAuth();
+  const { t } = useLang();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -29,12 +32,12 @@ export const SchoolLayout = () => {
   };
 
   const navItems = [
-    { name: 'Dashboard', path: '/school/dashboard', icon: LayoutDashboard },
-    { name: 'Digital Twin', path: '/school/digital-twin', icon: Box },
-    { name: 'Water Quality & Tank', path: '/school/water', icon: Droplets },
-    { name: 'Meal & Kitchen Hygiene', path: '/school/meals', icon: UtensilsCrossed },
-    { name: 'Incident & Alerts', path: '/school/alerts', icon: AlertTriangle },
-    { name: 'Profile', path: '/school/profile', icon: User },
+    { nameKey: 'dashboard', path: '/school/dashboard', icon: LayoutDashboard },
+    { nameKey: 'digitalTwin', path: '/school/digital-twin', icon: Box },
+    { nameKey: 'waterQuality', path: '/school/water', icon: Droplets },
+    { nameKey: 'mealKitchen', path: '/school/meals', icon: UtensilsCrossed },
+    { nameKey: 'alerts', path: '/school/alerts', icon: AlertTriangle },
+    { nameKey: 'profile', path: '/school/profile', icon: User },
   ];
 
   return (
@@ -59,7 +62,7 @@ export const SchoolLayout = () => {
             </div>
             <div>
               <h1 className="font-bold text-sm tracking-wide text-white">SmartSchoolIoT</h1>
-              <p className="text-[10px] text-cyan-400 font-medium tracking-wider uppercase">School Field Node</p>
+              <p className="text-[10px] text-cyan-400 font-medium tracking-wider uppercase">{t('schoolFieldNode')}</p>
             </div>
           </div>
           <button
@@ -72,11 +75,11 @@ export const SchoolLayout = () => {
 
         {/* School Identification Card */}
         <div className="m-3 p-3 rounded-xl bg-slate-950 border border-slate-800">
-          <p className="text-[10px] font-bold tracking-wider text-teal-400 uppercase">Registered Institution</p>
+          <p className="text-[10px] font-bold tracking-wider text-teal-400 uppercase">{t('registeredInstitution')}</p>
           <p className="text-xs font-semibold text-white mt-0.5 truncate">{user?.school_name || 'ZPHS Poranki'}</p>
           <div className="flex items-center space-x-1.5 mt-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-            <span className="text-[10px] text-emerald-400 font-medium">Node Active</span>
+            <span className="text-[10px] text-emerald-400 font-medium">{t('nodeActive')}</span>
           </div>
         </div>
 
@@ -98,7 +101,7 @@ export const SchoolLayout = () => {
                 }
               >
                 <Icon className="w-4 h-4 mr-3 shrink-0" />
-                <span>{item.name}</span>
+                <span>{t(item.nameKey)}</span>
               </NavLink>
             );
           })}
@@ -113,7 +116,7 @@ export const SchoolLayout = () => {
               </div>
               <div className="truncate">
                 <p className="text-xs font-semibold text-slate-200 truncate">{user?.email}</p>
-                <p className="text-[10px] text-slate-400">School Operator</p>
+                <p className="text-[10px] text-slate-400">{t('schoolOperator')}</p>
               </div>
             </div>
           </div>
@@ -122,7 +125,7 @@ export const SchoolLayout = () => {
             className="w-full flex items-center justify-center px-3 py-2 text-xs font-medium text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 rounded-lg transition-colors border border-rose-500/20"
           >
             <LogOut className="w-3.5 h-3.5 mr-2" />
-            Logout
+            {t('logout')}
           </button>
         </div>
       </aside>
@@ -143,18 +146,19 @@ export const SchoolLayout = () => {
                 {user?.school_name || 'ZPHS Poranki'}
               </span>
               <span className="hidden sm:inline-block ml-2 text-xs text-slate-400 font-normal">
-                • Field Telemetry & Mid-Day Meal Node
+                • {t('fieldTelemetry')}
               </span>
             </div>
           </div>
 
           <div className="flex items-center space-x-3">
+            <LanguageToggle />
             <button
               onClick={() => setUploadModalOpen(true)}
-              className="flex items-center space-x-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md shadow-teal-500/10 transition-all"
+              className="flex items-center space-x-1.5 bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-slate-950 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-md shadow-teal-500/10 transition-all cursor-pointer"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>+ Staff Upload</span>
+              <span>{t('uploadPhoto')}</span>
             </button>
           </div>
         </header>
